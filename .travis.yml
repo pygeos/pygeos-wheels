@@ -28,64 +28,44 @@ matrix:
   - python: 3.5
 
   include:
-  - name: "Python 2.7 x86_64 linux"
-    os: linux
-    env:
-    - MB_PYTHON_VERSION=2.7
-    - NP_BUILD_DEP=numpy==1.10.4
-    - NP_TEST_DEP=numpy==1.11.3
   - name: "Python 3.5 x86_64 linux"
     os: linux
     env:
     - MB_PYTHON_VERSION=3.5
     - NP_BUILD_DEP=numpy==1.10.4
-    - NP_TEST_DEP=numpy==1.11.3
   - name: "Python 3.6 x86_64 linux"
     os: linux
     env:
     - MB_PYTHON_VERSION=3.6
     - NP_BUILD_DEP=numpy==1.11.3
-    - NP_TEST_DEP=numpy==1.11.3
   - name: "Python 3.7 x86_64 linux"
     os: linux
     env:
     - MB_PYTHON_VERSION=3.7
     - NP_BUILD_DEP=numpy==1.14.5
-    - NP_TEST_DEP=numpy==1.14.5
   - name: "Python 3.8 x86_64 linux"
     os: linux
     env:
     - MB_PYTHON_VERSION=3.8
     - NP_BUILD_DEP=numpy==1.17.3
-    - NP_TEST_DEP=numpy==1.17.3
-  - name: "Python 2.7 osx"
-    os: osx
-    language: generic
-    env:
-    - MB_PYTHON_VERSION=2.7
-    - NP_BUILD_DEP=numpy==1.10.4
-    - NP_TEST_DEP=numpy==1.11.3
   - name: "Python 3.5 osx"
     os: osx
     language: generic
     env:
     - MB_PYTHON_VERSION=3.5
     - NP_BUILD_DEP=numpy==1.10.4
-    - NP_TEST_DEP=numpy==1.11.3
   - name: "Python 3.6 osx"
     os: osx
     language: generic
     env:
     - MB_PYTHON_VERSION=3.6
     - NP_BUILD_DEP=numpy==1.11.3
-    - NP_TEST_DEP=numpy==1.11.3
   - name: "Python 3.7 osx"
     os: osx
     language: generic
     env:
     - MB_PYTHON_VERSION=3.7
     - NP_BUILD_DEP=numpy==1.14.5
-    - NP_TEST_DEP=numpy==1.14.5
   - os: osx
     language: generic
     osx_image: xcode10.1
@@ -98,7 +78,7 @@ matrix:
 before_install:
     - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
     - BUILD_DEPENDS="$NP_BUILD_DEP wheel==0.31.1"
-    - TEST_DEPENDS="$NP_TEST_DEP pytest $GEN_DEPS"
+    - TEST_DEPENDS="$NP_BUILD_DEP pytest $GEN_DEPS"
     - source multibuild/common_utils.sh
     - source multibuild/travis_steps.sh
     - before_install
