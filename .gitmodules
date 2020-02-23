@@ -1,0 +1,6 @@
+[submodule "multibuild"]
+	path = multibuild
+	url = https://github.com/matthew-brett/multibuild.git
+[submodule "pygeos"]
+	path = pygeos
+	url = https://github.com/pygeos/pygeos.git
