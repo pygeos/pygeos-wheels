@@ -1,3 +1,7 @@
 [submodule "pygeos"]
 	path = pygeos
 	url = https://github.com/pygeos/pygeos.git
+[submodule "multibuild"]
+	path = multibuild
+	url = https://github.com/caspervdw/multibuild.git
+	branch = verbose
