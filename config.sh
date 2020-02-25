@@ -15,13 +15,5 @@ function pre_build {
 
 
 function run_tests {
-    if [ -n "$IS_OSX" ]; then
-        export PATH=$PATH:${BUILD_PREFIX}/bin
-        export LC_ALL=en_US.UTF-8
-        export LANG=en_US.UTF-8
-    else
-        export LC_ALL=C.UTF-8
-        export LANG=C.UTF-8
-    fi
-    python -m pytest ../pygeos
+    python -m pytest pygeos
 }
