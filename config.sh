@@ -14,6 +14,7 @@ function pre_build {
 }
 
 
-function run_tests {
-    python -m pytest pygeos
+function run_tests {  
+    cp -R ../pygeos/pygeos/test . 
+    python -m pytest test
 }
