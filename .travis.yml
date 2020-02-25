@@ -1,9 +1,6 @@
-language: python
-python: 3.5
-sudo: required
-dist: trusty
+language: generic
+dist: xenial
 services: docker
-filter_secrets: false
 
 cache:
   directories:
@@ -24,9 +21,6 @@ addons:
     - $(ls wheelhouse/*.whl)
 
 matrix:
-  exclude:
-  - python: 3.5
-
   include:
   - name: "Python 3.5 x86_64 linux"
     os: linux
@@ -50,24 +44,20 @@ matrix:
     - NP_BUILD_DEP=numpy==1.17.3
   - name: "Python 3.5 osx"
     os: osx
-    language: generic
     env:
     - MB_PYTHON_VERSION=3.5
     - NP_BUILD_DEP=numpy==1.10.4
   - name: "Python 3.6 osx"
     os: osx
-    language: generic
     env:
     - MB_PYTHON_VERSION=3.6
     - NP_BUILD_DEP=numpy==1.11.3
   - name: "Python 3.7 osx"
     os: osx
-    language: generic
     env:
     - MB_PYTHON_VERSION=3.7
     - NP_BUILD_DEP=numpy==1.14.5
   - os: osx
-    language: generic
     osx_image: xcode10.1
     env:
     - MB_PYTHON_VERSION=3.8
@@ -77,8 +67,8 @@ matrix:
 
 before_install:
     - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
-    - BUILD_DEPENDS="$NP_BUILD_DEP wheel==0.31.1"
-    - TEST_DEPENDS="$NP_BUILD_DEP attrs==19.1.0 pytest==4.0.2 boto3 packaging hypothesis==4.38.1 wheel==0.31.1 $GEN_DEPS"
+    - BUILD_DEPENDS="$NP_BUILD_DEP"
+    - TEST_DEPENDS="$NP_BUILD_DEP pytest"
     - source multibuild/common_utils.sh
     - source multibuild/travis_steps.sh
     - before_install
