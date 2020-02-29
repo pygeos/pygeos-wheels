@@ -15,11 +15,6 @@ env:
   - UNICODE_WIDTH=32
   - USE_CCACHE=1
 
-addons:
-  artifacts:
-    paths:
-    - $(ls wheelhouse/*.whl)
-
 matrix:
   include:
   - name: "Python 3.5 x86_64 linux"
