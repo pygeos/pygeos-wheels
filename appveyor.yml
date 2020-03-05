@@ -1,0 +1,109 @@
+---
+image: Visual Studio 2017
+platform: x64
+
+environment:
+  global:
+    GEOSVERSION: "3.8.0"
+
+  matrix:
+    - PYTHON: "C:\\Python35"
+      ARCH: x86
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python35-x64"
+      ARCH: x64
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python36"
+      ARCH: x86
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python36-x64"
+      ARCH: x64
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python37"
+      ARCH: x86
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python37-x64"
+      ARCH: x64
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python38"
+      ARCH: x86
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python38-x64"
+      ARCH: x64
+      COMPILER: msvc2017
+
+install:
+  # If there is a newer build queued for the same PR, cancel this one.
+  # The AppVeyor 'rollout builds' option is supposed to serve the same
+  # purpose but it is problematic because it tends to cancel builds pushed
+  # directly to master instead of just PR builds (or the converse).
+  # credits: JuliaLang developers.
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+          throw "There are newer queued builds for this pull request, failing early." }
+
+build_script:
+  - set _INITPATH=%PATH%
+
+  - ps: 'Write-Host "Configuring PATH with $env:PYTHON" -ForegroundColor Magenta'
+  - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+
+  - ps: 'Write-Host "Configuring MSVC compiler $env:COMPILER" -ForegroundColor Magenta'
+  - if %COMPILER%==msvc2017 ( call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% )
+
+  - ps: 'Write-Host "Cached dependency folder" -ForegroundColor Magenta'
+  - if not exist C:\projects\deps mkdir C:\projects\deps
+  - dir C:\projects\deps
+
+  - set GEOSINSTALL=C:\projects\deps\geos-%GEOSVERSION%-%COMPILER%-%ARCH%
+  - ps: 'Write-Host "Checking GEOS build $env:GEOSINSTALL" -ForegroundColor Magenta'
+  - call %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd
+
+  - ps: 'Write-Host "Copying and checking geos_c.dll" -ForegroundColor Magenta'
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - git submodule update --init pygeos
+  - cd pygeos
+  - git log -1
+  - cd pygeos
+  - xcopy %GEOSINSTALL%\bin\geos*.dll .
+  - dumpbin /dependents geos_c.dll
+  - dumpbin /dependents %PYTHON%\python.exe
+  - python -c "import sys; print('Python ' + sys.version)"
+  - python -c "import ctypes; print(ctypes.CDLL('./geos_c.dll'))"
+  - cd ..
+
+  - ps: 'Write-Host "Installing Python requirements" -ForegroundColor Magenta'
+  - python -m pip install --upgrade pip
+  - pip install wheel numpy
+
+  - ps: 'Write-Host "Building wheel" -ForegroundColor Magenta'
+  - set GEOS_INCLUDE_PATH=%GEOSINSTALL%\include
+  - set GEOS_LIBRARY_PATH=%GEOSINSTALL%\lib
+  - python setup.py build_ext bdist_wheel
+
+  - ps: 'Write-Host "Checking pip install in a new environment" -ForegroundColor Magenta'
+  - set PATH=%_INITPATH%
+  - set GEOS_INCLUDE_PATH=
+  - set GEOS_LIBRARY_PATH=
+  - '%PYTHON%\python.exe -m venv C:\projects\venv'
+  - call C:\projects\venv\Scripts\activate.bat
+  - pip install --disable-pip-version-check numpy
+  - cd dist
+  - pip install --no-index --find-links . --no-cache-dir pygeos
+  - python -c "import pygeos; print(pygeos.__version__)"
+
+  - ps: 'Write-Host "Running pytest" -ForegroundColor Magenta'
+  - cd %APPVEYOR_BUILD_FOLDER%\pygeos\pygeos
+  - xcopy test\* C:\projects\test /s /i
+  - cd C:\projects\test
+  - dir
+  - pip install --disable-pip-version-check pytest
+  - pytest
+
+cache:
+  - C:\projects\deps -> %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd
+
+artifacts:
+  - path: pygeos\dist\*.whl
+    name: wheel
