@@ -74,3 +74,6 @@ install:
 
 script:
     - install_run $PLAT
+
+after_success:
+    - test $TRAVIS_BRANCH = "deploy-test" && pip install twine && twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ --non-interactive --skip-existing --disable-progress-bar ${TRAVIS_BUILD_DIR}/wheelhouse/

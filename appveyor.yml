@@ -4,7 +4,8 @@ platform: x64
 
 environment:
   global:
-    GEOSVERSION: "3.8.0"
+    GEOS_VERSION: "3.8.0"
+    BUILD_COMMIT: "0.6"
 
   matrix:
     - PYTHON: "C:\\Python35"
@@ -56,7 +57,7 @@ build_script:
   - if not exist C:\projects\deps mkdir C:\projects\deps
   - dir C:\projects\deps
 
-  - set GEOSINSTALL=C:\projects\deps\geos-%GEOSVERSION%-%COMPILER%-%ARCH%
+  - set GEOSINSTALL=C:\projects\deps\geos-%GEOS_VERSION%-%COMPILER%-%ARCH%
   - ps: 'Write-Host "Checking GEOS build $env:GEOSINSTALL" -ForegroundColor Magenta'
   - call %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd
 
@@ -64,6 +65,10 @@ build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule update --init pygeos
   - cd pygeos
+  - git fetch origin
+  - git checkout $BUILD_COMMIT
+  - git clean -fxd
+  - git reset --hard
   - git log -1
   - cd pygeos
   - xcopy %GEOSINSTALL%\bin\geos*.dll .
