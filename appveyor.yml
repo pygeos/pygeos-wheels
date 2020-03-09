@@ -105,6 +105,17 @@ build_script:
   - dir
   - pip install --disable-pip-version-check pytest
   - pytest
+for:
+
+# override settings for `master` branch
+-
+  branches:
+    only:
+      - deploy-test
+
+  on_success:
+    - pip install twine
+    - twine upload twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ -p %TWINE_PASSWORD_TEST% --skip-existing --disable-progress-bar %APPVEYOR_BUILD_FOLDER%\pygeos\pygeos\dist\*.whl
 
 cache:
   - C:\projects\deps -> %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd

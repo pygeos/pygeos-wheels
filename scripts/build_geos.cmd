@@ -7,10 +7,10 @@ if exist %GEOSINSTALL% (
 
   cd C:\projects
 
-  curl -fsSO http://download.osgeo.org/geos/geos-%GEOSVERSION%.tar.bz2
-  7z x geos-%GEOSVERSION%.tar.bz2
-  7z x geos-%GEOSVERSION%.tar
-  cd geos-%GEOSVERSION%
+  curl -fsSO http://download.osgeo.org/geos/geos-%GEOS_VERSION%.tar.bz2
+  7z x geos-%GEOS_VERSION%.tar.bz2
+  7z x geos-%GEOS_VERSION%.tar
+  cd geos-%GEOS_VERSION%
 
   pip install ninja
   cmake --version
@@ -23,4 +23,3 @@ if exist %GEOSINSTALL% (
   cmake --install . --config Release
   cd ..
 )
-
