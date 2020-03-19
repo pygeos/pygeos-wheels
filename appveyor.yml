@@ -106,31 +106,11 @@ build_script:
   - pip install --disable-pip-version-check pytest
   - pytest
 
-
-for:
-
--
-  branches:
-    only:
-      - deploy-test
-
-  on_success:
-    - pip install twine
-    - cd %APPVEYOR_BUILD_FOLDER%\pygeos\pygeos
-    - twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ -p %TWINE_PASSWORD_TEST% --skip-existing --disable-progress-bar dist/*.whl
-
-
-for:
-
--
-  branches:
-    only:
-      - master
-
-  on_success:
-    - pip install twine
-    - cd %APPVEYOR_BUILD_FOLDER%\pygeos\pygeos
-    - twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ --skip-existing --disable-progress-bar dist/*.whl
+on_success:
+  - pip install twine
+  - cd %APPVEYOR_BUILD_FOLDER%\pygeos\pygeos
+  - if %APPVEYOR_REPO_BRANCH% == "deploy-test" twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ -p %TWINE_PASSWORD_TEST% --skip-existing --disable-progress-bar dist/*.whl
+  - if %APPVEYOR_REPO_BRANCH% == "master" twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ --skip-existing --disable-progress-bar dist/*.whl
 
 cache:
   - C:\projects\deps -> %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd
