@@ -4,7 +4,7 @@ platform: x64
 
 environment:
   global:
-    GEOS_VERSION: "3.8.0"
+    GEOS_VERSION: "3.8.1"
     BUILD_COMMIT: "0.6"
 
   matrix:
