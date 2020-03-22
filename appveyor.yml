@@ -5,7 +5,7 @@ platform: x64
 environment:
   global:
     GEOS_VERSION: "3.8.1"
-    BUILD_COMMIT: "0.7"
+    BUILD_COMMIT: "0.7.1"
 
   matrix:
     - PYTHON: "C:\\Python35"
