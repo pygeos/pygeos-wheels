@@ -10,7 +10,7 @@ cache:
 env:
   global:
   - REPO_DIR="pygeos"
-  - BUILD_COMMIT=0.6
+  - BUILD_COMMIT=0.7.1
   - PLAT=x86_64
   - UNICODE_WIDTH=32
   - USE_CCACHE=1
@@ -74,3 +74,7 @@ install:
 
 script:
     - install_run $PLAT
+
+after_success:
+    - test $TRAVIS_BRANCH = "deploy-test" && pip install twine && twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ --skip-existing --disable-progress-bar ${TRAVIS_BUILD_DIR}/wheelhouse/*.whl || echo "Skipping artefact test upload"
+    - test $TRAVIS_BRANCH = "master" && pip install twine && twine upload -r pygeos -u __token__ --skip-existing --disable-progress-bar ${TRAVIS_BUILD_DIR}/wheelhouse/*.whl || echo "Skipping artefact upload"

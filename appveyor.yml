@@ -4,7 +4,8 @@ platform: x64
 
 environment:
   global:
-    GEOSVERSION: "3.8.1"
+    GEOS_VERSION: "3.8.1"
+    BUILD_COMMIT: "0.7.1"
 
   matrix:
     - PYTHON: "C:\\Python35"
@@ -56,7 +57,7 @@ build_script:
   - if not exist C:\projects\deps mkdir C:\projects\deps
   - dir C:\projects\deps
 
-  - set GEOSINSTALL=C:\projects\deps\geos-%GEOSVERSION%-%COMPILER%-%ARCH%
+  - set GEOSINSTALL=C:\projects\deps\geos-%GEOS_VERSION%-%COMPILER%-%ARCH%
   - ps: 'Write-Host "Checking GEOS build $env:GEOSINSTALL" -ForegroundColor Magenta'
   - call %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd
 
@@ -64,6 +65,10 @@ build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule update --init pygeos
   - cd pygeos
+  - git fetch origin
+  - git checkout %BUILD_COMMIT%
+  - git clean -fxd
+  - git reset --hard
   - git log -1
   - cd pygeos
   - xcopy %GEOSINSTALL%\bin\geos*.dll .
@@ -100,6 +105,12 @@ build_script:
   - dir
   - pip install --disable-pip-version-check pytest
   - pytest
+
+on_success:
+  - pip install twine
+  - cd %APPVEYOR_BUILD_FOLDER%\pygeos
+  - if "%APPVEYOR_REPO_BRANCH%" == "deploy-test" (twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ -p %TWINE_PASSWORD_TEST% --skip-existing --disable-progress-bar dist\*.whl) else (echo Skipping test upload)
+  - if "%APPVEYOR_REPO_BRANCH%" == "master" (twine upload -r pygeos -u __token__ --skip-existing --disable-progress-bar dist\*.whl) else (echo Skipping upload)
 
 cache:
   - C:\projects\deps -> %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd
