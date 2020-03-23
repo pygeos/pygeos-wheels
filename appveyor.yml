@@ -109,8 +109,8 @@ build_script:
 on_success:
   - pip install twine
   - cd %APPVEYOR_BUILD_FOLDER%\pygeos
-  - if "%APPVEYOR_REPO_BRANCH%" == "deploy-test" (twine upload -r pygeos --repository-url https://test.pypi.org/legacy/ -u __token__ -p %TWINE_PASSWORD_TEST% --skip-existing --disable-progress-bar dist\*.whl) else (echo Skipping test upload)
-  - if "%APPVEYOR_REPO_BRANCH%" == "master" (twine upload -r pygeos -u __token__ --skip-existing --disable-progress-bar dist\*.whl) else (echo Skipping upload)
+  - if "%APPVEYOR_REPO_BRANCH%" == "deploy-test" (twine upload --repository-url https://test.pypi.org/legacy/ -u __token__ -p %TWINE_PASSWORD_TEST% --skip-existing --disable-progress-bar dist\*.whl) else (echo Skipping test upload)
+  - if "%APPVEYOR_REPO_BRANCH%" == "master" (twine upload -u __token__ --skip-existing --disable-progress-bar dist\*.whl) else (echo Skipping upload)
 
 cache:
   - C:\projects\deps -> %APPVEYOR_BUILD_FOLDER%\scripts\build_geos.cmd
