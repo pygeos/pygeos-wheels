@@ -4,16 +4,10 @@ platform: x64
 
 environment:
   global:
-    GEOS_VERSION: "3.8.1"
-    BUILD_COMMIT: "0.8"
+    GEOS_VERSION: "3.9.0"
+    BUILD_COMMIT: "13a948b05687cd8eca81d107537954e5dae8ae65"
 
   matrix:
-    - PYTHON: "C:\\Python35"
-      ARCH: x86
-      COMPILER: msvc2017
-    - PYTHON: "C:\\Python35-x64"
-      ARCH: x64
-      COMPILER: msvc2017
     - PYTHON: "C:\\Python36"
       ARCH: x86
       COMPILER: msvc2017
@@ -30,6 +24,12 @@ environment:
       ARCH: x86
       COMPILER: msvc2017
     - PYTHON: "C:\\Python38-x64"
+      ARCH: x64
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python39"
+      ARCH: x86
+      COMPILER: msvc2017
+    - PYTHON: "C:\\Python39-x64"
       ARCH: x64
       COMPILER: msvc2017
 

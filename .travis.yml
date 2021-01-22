@@ -10,18 +10,13 @@ cache:
 env:
   global:
   - REPO_DIR="pygeos"
-  - BUILD_COMMIT=0.8
+  - BUILD_COMMIT=13a948b05687cd8eca81d107537954e5dae8ae65
   - PLAT=x86_64
   - UNICODE_WIDTH=32
   - USE_CCACHE=1
 
 matrix:
   include:
-  - name: "Python 3.5 x86_64 linux"
-    os: linux
-    env:
-    - MB_PYTHON_VERSION=3.5
-    - NP_BUILD_DEP=numpy==1.10.4
   - name: "Python 3.6 x86_64 linux"
     os: linux
     env:
@@ -37,11 +32,11 @@ matrix:
     env:
     - MB_PYTHON_VERSION=3.8
     - NP_BUILD_DEP=numpy==1.17.3
-  - name: "Python 3.5 osx"
-    os: osx
+  - name: "Python 3.9 x86_64 linux"
+    os: linux
     env:
-    - MB_PYTHON_VERSION=3.5
-    - NP_BUILD_DEP=numpy==1.10.4
+    - MB_PYTHON_VERSION=3.9
+    - NP_BUILD_DEP=numpy==1.19.5
   - name: "Python 3.6 osx"
     os: osx
     env:
