@@ -73,7 +73,7 @@ build_script:
 
   - ps: 'Write-Host "Installing Python requirements" -ForegroundColor Magenta'
   - python -m pip install --upgrade pip
-  - pip install wheel numpy
+  - pip install wheel numpy cython
 
   - ps: 'Write-Host "Building wheel" -ForegroundColor Magenta'
   - set GEOS_INCLUDE_PATH=%GEOS_INSTALL%\include
