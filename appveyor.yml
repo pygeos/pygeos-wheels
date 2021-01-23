@@ -5,14 +5,8 @@ platform: x64
 environment:
   global:
     COMPILER: msvc2019
-    GEOS_VERSION: "3.8.1"
-    BUILD_COMMIT: "0.8"
-
-  matrix:
-    - PYTHON: "C:\\Python35"
-      ARCH: x86
-    - PYTHON: "C:\\Python35-x64"
-      ARCH: x64
+    GEOS_VERSION: "3.9.0"
+    BUILD_COMMIT: "0.9"
 
   matrix:
     - PYTHON: "C:\\Python36"
