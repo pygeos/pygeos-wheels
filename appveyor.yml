@@ -6,7 +6,7 @@ environment:
   global:
     COMPILER: msvc2019
     GEOS_VERSION: "3.9.0"
-    BUILD_COMMIT: "0.9"
+    BUILD_COMMIT: "0.10"
 
   matrix:
     - PYTHON: "C:\\Python36"
