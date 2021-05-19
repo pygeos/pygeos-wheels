@@ -5,26 +5,34 @@ platform: x64
 environment:
   global:
     COMPILER: msvc2019
-    GEOS_VERSION: "3.9.0"
-    BUILD_COMMIT: "0.9"
+    GEOS_VERSION: "3.9.1"
+    BUILD_COMMIT: "0.10"
 
   matrix:
     - PYTHON: "C:\\Python36"
       ARCH: x86
+      NUMPY: "1.13.3"
     - PYTHON: "C:\\Python36-x64"
       ARCH: x64
+      NUMPY: "1.13.3"
     - PYTHON: "C:\\Python37"
       ARCH: x86
+      NUMPY: "1.14.5"
     - PYTHON: "C:\\Python37-x64"
       ARCH: x64
+      NUMPY: "1.14.5"
     - PYTHON: "C:\\Python38"
       ARCH: x86
+      NUMPY: "1.17.3"
     - PYTHON: "C:\\Python38-x64"
       ARCH: x64
+      NUMPY: "1.17.3"
     - PYTHON: "C:\\Python39"
       ARCH: x86
+      NUMPY: "1.19.5"
     - PYTHON: "C:\\Python39-x64"
       ARCH: x64
+      NUMPY: "1.19.5"
 
 install:
   # If there is a newer build queued for the same PR, cancel this one.
@@ -73,7 +81,7 @@ build_script:
 
   - ps: 'Write-Host "Installing Python requirements" -ForegroundColor Magenta'
   - python -m pip install --upgrade pip
-  - pip install wheel numpy cython
+  - pip install wheel numpy==%NUMPY% cython
 
   - ps: 'Write-Host "Building wheel" -ForegroundColor Magenta'
   - set GEOS_INCLUDE_PATH=%GEOS_INSTALL%\include
@@ -86,7 +94,7 @@ build_script:
   - set GEOS_LIBRARY_PATH=
   - '%PYTHON%\python.exe -m venv C:\projects\venv'
   - call C:\projects\venv\Scripts\activate.bat
-  - pip install --disable-pip-version-check numpy
+  - pip install --disable-pip-version-check numpy==%NUMPY%
   - cd dist
   - pip install --no-index --find-links . --no-cache-dir pygeos
   - python -c "import pygeos; print(pygeos.__version__)"
