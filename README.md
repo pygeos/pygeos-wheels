@@ -1,5 +1,8 @@
 # PyGEOS wheelbuilder
 
+**This repository is not used anymore**
+Wheels are now built using cibuildwheel on [Github Actions](https://github.com/pygeos/pygeos/actions/workflows/release.yml).
+
 This repository contains build scripts to fabricate wheels for pygeos.
 
 There are two completely independent scripts: one for Linux/OSX (based on
